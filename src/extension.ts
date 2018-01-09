@@ -6,59 +6,33 @@ import { TextEditor, ViewColumn } from 'vscode';
 export function activate(context: vscode.ExtensionContext) {
     let disposable = vscode.commands.registerCommand('extension.navigateToTest', () => {
         let currentFile = vscode.window.activeTextEditor.document.fileName;
+        let targetFile = null;
 
         if (currentFile.endsWith('.ts')) {
             if (currentFile.includes('.spec')) {
-                let implementationFile = currentFile.replace(".spec.ts", ".ts")
-                
-                let alreadyOpen = false;
-                let exisitingEditor: TextEditor = null;
-                let existingColumn : ViewColumn = null;
-
-                vscode.window.visibleTextEditors.forEach((editor) => {
-                    if (editor.document.fileName == implementationFile) {
-                        console.log(editor.document.fileName);
-                        alreadyOpen = true;
-                        exisitingEditor = editor;
-                        existingColumn = editor.viewColumn;
-                    }
-                })
-
-                if (!alreadyOpen) {
-                    vscode.workspace.openTextDocument(implementationFile).then((textDocument)=> {
-                        vscode.window.showTextDocument(textDocument, vscode.ViewColumn.One);                    
-                    });
-                } else {
-                    vscode.workspace.openTextDocument(implementationFile).then((textDocument)=> {
-                        vscode.window.showTextDocument(textDocument, existingColumn);                    
-                    })
-                }
+                targetFile = currentFile.replace(".spec.ts", ".ts")
             } else {
-                let testFile = currentFile.replace(".ts", ".spec.ts");
+                targetFile = currentFile.replace(".ts", ".spec.ts");
+            }
 
-                let alreadyOpen = false;
-                let exisitingEditor: TextEditor = null;
-                let existingColumn : ViewColumn = null;
+            let existingEditor: TextEditor = null;
+            let existingColumn : ViewColumn = null;
 
-                vscode.window.visibleTextEditors.forEach((editor) => {
-                    if (editor.document.fileName == testFile) {
-                        console.log(editor.document.fileName);
-
-                        alreadyOpen = true;
-                        exisitingEditor = editor;
-                        existingColumn = editor.viewColumn;
-                    }
-                })
-
-                if (!alreadyOpen) {
-                    vscode.workspace.openTextDocument(testFile).then((textDocument)=> {
-                        vscode.window.showTextDocument(textDocument, vscode.ViewColumn.One);                    
-                    })
-                } else {
-                    vscode.workspace.openTextDocument(testFile).then((textDocument)=> {
-                        vscode.window.showTextDocument(textDocument, existingColumn);                    
-                    })
+            vscode.window.visibleTextEditors.forEach((editor) => {
+                if (editor.document.fileName == targetFile) {
+                    existingEditor = editor;
+                    existingColumn = editor.viewColumn;
                 }
+            })
+
+            if (existingEditor == null) {
+                vscode.workspace.openTextDocument(targetFile).then((textDocument)=> {
+                    vscode.window.showTextDocument(textDocument, vscode.ViewColumn.One);                    
+                });
+            } else {
+                vscode.workspace.openTextDocument(targetFile).then((textDocument)=> {
+                    vscode.window.showTextDocument(textDocument, existingColumn);                    
+                })
             }
         }
     });
