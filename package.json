@@ -1,8 +1,8 @@
 {
     "name": "navigate-to-test",
-    "displayName": "navigate-to-test",
+    "displayName": "Naviate to Test",
     "description": "Easily navigate between implementation code and test code with a shortcut.",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "publisher": "spilth",
     "engines": {
         "vscode": "^1.19.0"

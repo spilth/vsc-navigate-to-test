@@ -15,6 +15,10 @@ A Visual Studio Code Extension to easily navigate between a test file and the te
 
 ## Release Notes
 
+### 0.0.2
+
+Fix the Display Name of the Extension
+
 ### 0.0.1
 
 Initial release of Navigate to Test
