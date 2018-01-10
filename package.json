@@ -2,13 +2,19 @@
     "name": "navigate-to-test",
     "displayName": "Naviate to Test",
     "description": "Easily navigate between implementation code and test code with a shortcut.",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "publisher": "spilth",
     "engines": {
         "vscode": "^1.19.0"
     },
+    "icon": "images/icon.png",
     "categories": [
         "Other"
+    ],
+    "keywords": [
+        "test",
+        "spec",
+        "navigation"
     ],
     "activationEvents": [
         "onCommand:extension.navigateToTest"
