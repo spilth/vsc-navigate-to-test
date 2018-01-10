@@ -5,33 +5,40 @@ import { TextEditor, ViewColumn } from 'vscode';
 
 export function activate(context: vscode.ExtensionContext) {
     let disposable = vscode.commands.registerCommand('extension.navigateToTest', () => {
-        let currentFile = vscode.window.activeTextEditor.document.fileName;
-        let targetFile = null;
+        let currentFileName = vscode.window.activeTextEditor.document.fileName;
+        let currentColumn = vscode.window.activeTextEditor.viewColumn;
 
-        if (currentFile.endsWith('.ts')) {
-            if (currentFile.includes('.spec')) {
-                targetFile = currentFile.replace(".spec.ts", ".ts")
+        let targetFileName = null;
+        let targetColumn = vscode.ViewColumn.One;
+
+        if (currentFileName.endsWith('.ts')) {
+            if (currentFileName.includes('.spec')) {
+                targetFileName = currentFileName.replace(".spec.ts", ".ts")
             } else {
-                targetFile = currentFile.replace(".ts", ".spec.ts");
+                targetFileName = currentFileName.replace(".ts", ".spec.ts");
+            }
+
+            if (currentColumn == vscode.ViewColumn.One) {
+                targetColumn = vscode.ViewColumn.Two;
             }
 
             let existingEditor: TextEditor = null;
             let existingColumn : ViewColumn = null;
 
             vscode.window.visibleTextEditors.forEach((editor) => {
-                if (editor.document.fileName == targetFile) {
+                if (editor.document.fileName == targetFileName) {
                     existingEditor = editor;
                     existingColumn = editor.viewColumn;
                 }
             })
 
             if (existingEditor == null) {
-                vscode.workspace.openTextDocument(targetFile).then((textDocument)=> {
-                    vscode.window.showTextDocument(textDocument, vscode.ViewColumn.One);                    
+                vscode.workspace.openTextDocument(targetFileName).then((textDocument)=> {
+                    vscode.window.showTextDocument(textDocument, targetColumn);
                 });
             } else {
-                vscode.workspace.openTextDocument(targetFile).then((textDocument)=> {
-                    vscode.window.showTextDocument(textDocument, existingColumn);                    
+                vscode.workspace.openTextDocument(targetFileName).then((textDocument)=> {
+                    vscode.window.showTextDocument(textDocument, existingColumn);
                 })
             }
         }
